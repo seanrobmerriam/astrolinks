@@ -1,7 +1,7 @@
 ---
-import Icon from "@/components/media/Icon.astro";
 import NavLink from "@/components/global/NavLink.astro";
-import logo from "@/assets/logo/logo.svg";
+import Img from "@/components/media/Img.astro";
+import logo from "@/assets/logo/logo.png";
 import { SITE_NAME } from "@/consts.ts";
 
 interface Props {
@@ -18,7 +18,7 @@ const { render = true, overlap = false } = Astro.props;
   <header class:list={["nav_wrap", overlap && "overlap"]}>
     <div class="nav_inner">
       <a class="nav_logo" href="/" aria-label={SITE_NAME}>
-        <Icon src={logo} variant="full-width" />
+        <Img src={logo} variant="full-width" width={432} transparent loading="eager" fetchPriority="high" />
       </a>
       <button
         class="nav_toggle"
@@ -133,7 +133,7 @@ const { render = true, overlap = false } = Astro.props;
     .nav_logo {
       display: flex;
       align-items: center;
-      width: 6.5rem;
+      width: 20rem;
       transition: opacity var(--hover-duration) var(--hover-ease);
       @media (hover: hover) {
         &:hover {

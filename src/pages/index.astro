@@ -8,34 +8,215 @@ import lumos_background from "@/assets/graphics/lumos-background.svg";
 import Icon from "@/components/media/Icon.astro";
 import logo_icon from "@/assets/logo/logo-icon.svg";
 import ContentWrapper from "@/components/wrapper/ContentWrapper.astro";
+import Grid from "@/components/wrapper/Grid.astro";
+import Card from "@/components/item/Card.astro";
+import Button from "@/components/Button.astro";
+import DockerIcon from "@/assets/logo/docker.svg"; 
 ---
 
 <Layout theme="dark">
   <Section
-    paddingBottom="even"
+    id="hero-section"
+    paddingBottom="large"
     containerClass="flex-grow"
-    paddingTop="even"
-    class="flex-grow"
-    style="min-height: calc(100svh - var(--nav-height));"
+    paddingTop="large"
+    class="flex-grow font-figtree"
+    gap="4"
+
   >
-    <ContentWrapper
-      class="flex-grow theme-brand"
-      variant="card"
-      mediaOpacity={100}
-    >
-      <Icon src={logo_icon} variant="large" />
-      <Heading variant="display" tag="h1" class="margin-block-8">
-        Style Guide
-      </Heading>
-      <Eyebrow variant="tag">v1.0.2</Eyebrow>
+
+    <ContentWrapper variant="contain" class="background-transparent" column1Class="alignment-end align-self-start border-1 border-white radius-main" column2Class="align-items">
+      <div>
+        <Heading variant="h4" tag="h3" class="font-figtree">
+          Your self-hosted dashboard for links and services.
+        </Heading>
+      </div>
       <Img
         slot="column2"
-        src={lumos_background}
-        width={1920}
-        height={1080}
+        src={DockerIcon}
+        transparent
         loading="eager"
         fetchPriority="high"
+        class="padding-block-8 padding-inline-8"
       />
+<Heading variant="h3" tag="h2" class="font-figtree align-self-end ">
+        System Overview
+      </Heading>
+      <div slot="column2" class="flex-horizontal-wrap margin-block-4 border-1 border-white radius-main" style="--h5-font-weight: var(--primary-bold)">
+        <Card heading="CPU Usage" text="45%" class="background-transparent width-auto" />
+        <Card heading="Memory Usage" text="3.2 GB / 8 GB" class="background-transparent width-auto" />
+        <Card heading="Disk Usage" text="120 GB / 500 GB" class="background-transparent width-auto" />
+        <Card heading="Services" text="12" class="background-transparent width-auto" />
+        <Card heading="Bookmarks" text="13" class="background-transparent width-auto" />
+        <Card heading="Network Usage" text="1.2 MB/s" class="background-transparent width-auto" />
+        <Card heading="Running Containers" text="12" class="background-transparent width-auto" />
+      </div>
+    
+      
+
+      </ContentWrapper>
+  </Section>
+
+  <Section
+    id="links-section"
+    paddingBottom="even"
+    paddingTop="even"
+    class="font-figtree"
+  >
+  <ContentWrapper variant="auto-width">
+    <div>
+    <Heading variant="h2" tag="h2" class="font-figtree">
+      Bookmark Links
+    </Heading>
+    </div>
+    <div slot="column2">
+      <Button emphasis="secondary" aria-label="Edit bookmarks">Edit</Button>
+    </div>
+</ContentWrapper>
+<ContentWrapper variant="stack" column1Class="align-self-start">
+    <Grid class="border-1 radius-main border-white" id="bookmark-grid" xsmall={1} small={3} medium={4} large={8} xlarge={12}>
+      <Card icon="/icons/reddit.svg" heading="Reddit" text="Communities, news, and discussion." href="https://www.reddit.com" class="background-transparent" />
+      <Card icon="/icons/reddit.svg" heading="r/selfhosted" text="The self-hosting community on Reddit." href="https://www.reddit.com/r/selfhosted/" class="background-transparent" />
+      <Card icon="/icons/ycombinator.svg" heading="Hacker News" text="Tech news and discussion." href="https://news.ycombinator.com" class="background-transparent" />
+      <Card icon="/icons/github.svg" heading="GitHub" text="Code hosting and collaboration." href="https://github.com" class="background-transparent" />
+      <Card icon="/icons/stackoverflow.svg" heading="Stack Overflow" text="Programming questions and answers." href="https://stackoverflow.com" class="background-transparent" />
+      <Card icon="/icons/mdnwebdocs.svg" heading="MDN Web Docs" text="Reference for HTML, CSS, and JavaScript." href="https://developer.mozilla.org" class="background-transparent" />
+      <Card icon="/icons/astro.svg" heading="Astro Docs" text="Guides and API reference for Astro." href="https://docs.astro.build" class="background-transparent" />
+      <Card icon="/icons/docker.svg" heading="Docker Docs" text="Containers, Compose, and the Docker CLI." href="https://docs.docker.com" class="background-transparent" />
+      <Card icon="/icons/kubernetes.svg" heading="Kubernetes Docs" text="Concepts, tasks, and reference." href="https://kubernetes.io/docs/" class="background-transparent" />
+      <Card icon="/icons/proxmox.svg" heading="Proxmox VE Docs" text="Virtualization admin guide." href="https://pve.proxmox.com/pve-docs/" class="background-transparent" />
+      <Card icon="/icons/archlinux.svg" heading="ArchWiki" text="In-depth Linux documentation." href="https://wiki.archlinux.org" class="background-transparent" />
+      <Card icon="/icons/wikipedia.svg" heading="Wikipedia" text="The free encyclopedia." href="https://en.wikipedia.org" class="background-transparent" />
+      <Card icon="/icons/youtube.svg" heading="YouTube" text="Videos and tutorials." href="https://www.youtube.com" class="background-transparent" />
+    </Grid> 
+  <ContentWrapper variant="auto-width">
+    <div>
+    <Heading variant="h2" tag="h2" class="font-figtree">
+      Services
+    </Heading>
+    </div>
+    <div slot="column2">
+      <Button emphasis="secondary" aria-label="Edit services">Edit</Button>
+    </div>
+</ContentWrapper>
+    <Grid class="border-1 radius-main border-white" id="bookmark-grid" xsmall={3} small={4} medium={8}}>
+      <Card icon="/icons/plex.svg" heading="Plex" text="Organize and stream your media library." class="background-transparent" />
+      <Card icon="/icons/adguard.svg" heading="AdGuard Home" text="DNS-level ad blocking and privacy." class="background-transparent" />
+      <Card icon="/icons/grafana.svg" heading="Grafana" text="Dashboards for metrics and logs." class="background-transparent" />
+      <Card icon="/icons/prometheus.svg" heading="Prometheus" text="Metrics collection and alerting." class="background-transparent" />
+      <Card icon="/icons/nginx.svg" heading="Nginx Proxy Manager" text="Reverse proxy with easy SSL certificates." class="background-transparent" />
+      <Card icon="/icons/sonarr.svg" heading="Sonarr" text="Automatic TV show management." class="background-transparent" />
+      <Card icon="/icons/radarr.svg" heading="Radarr" text="Automatic movie management." class="background-transparent" />
+      <Card icon="/icons/qbittorrent.svg" heading="qBittorrent" text="Torrent client with a web interface." class="background-transparent" />
+      <Card icon="/icons/mealie.svg" heading="Mealie" text="Recipe manager and meal planner." class="background-transparent" />
+      <Card icon="/icons/freshrss.svg" heading="FreshRSS" text="Self-hosted RSS feed aggregator." class="background-transparent" />
+      <Card icon="/icons/navidrome.svg" heading="Navidrome" text="Music streaming server." class="background-transparent" />
+      <Card icon="/icons/authentik.svg" heading="Authentik" text="Single sign-on and identity provider." class="background-transparent" />
+      <Card icon="/icons/nextcloud-badge.svg" heading="Nextcloud" text="File sync, calendar, and contacts in one place." class="background-transparent" />
+      <Card icon="/icons/jellyfin.svg" heading="Jellyfin" text="Stream your movies, shows, and music." class="background-transparent" />
+      <Card icon="/icons/home-assistant.svg" heading="Home Assistant" text="Open-source home automation hub." class="background-transparent" />
+      <Card icon="/icons/pi-hole.svg" heading="Pi-hole" text="Network-wide ad and tracker blocking." class="background-transparent" />
+      <Card icon="/icons/vaultwarden.svg" heading="Vaultwarden" text="Lightweight Bitwarden-compatible password manager." class="background-transparent" />
+      <Card icon="/icons/immich.svg" heading="Immich" text="Photo and video backup from your phone." class="background-transparent" />
+      <Card icon="/icons/gitea.svg" heading="Gitea" text="Lightweight self-hosted Git service." class="background-transparent" />
+      <Card icon="/icons/portainer.svg" heading="Portainer" text="Manage Docker containers from the browser." class="background-transparent" />
+      <Card icon="/icons/uptime-kuma.svg" heading="Uptime Kuma" text="Monitor uptime for your services." class="background-transparent" />
+      <Card icon="/icons/syncthing.svg" heading="Syncthing" text="Peer-to-peer continuous file sync." class="background-transparent" />
+    </Grid>
     </ContentWrapper>
   </Section>
 </Layout>
+
+<style>
+  .font-reddit-sans {
+    font-family: "Reddit Sans Variable";
+  }
+
+  .font-bowlby-one-sc {
+    font-family: "Bowlby One SC";
+  }
+
+  .font-lilita-one {
+    font-family: "Lilita One";
+  }
+
+  .font-alfa-slab-one {
+    font-family: "Alfa Slab One";
+  }
+
+  .font-architects-daughter {
+    font-family: "Architects Daughter";
+  }
+
+  .font-grandstander {
+    font-family: "Grandstander Variable";
+  }
+
+  .font-acme {
+    font-family: "Acme";
+  }
+
+  .font-luckiest-guy {
+    font-family: "Luckiest Guy";
+  }
+
+  .font-dosis {
+    font-family: "Dosis Variable";
+  }
+
+  .font-fredoka {
+    font-family: "Fredoka Variable";
+  }
+
+  .font-urbanist {
+    font-family: "Urbanist Variable";
+  }
+
+  .font-anton {
+    font-family: "Anton";
+  }
+
+  .font-oswald {
+    font-family: "Oswald Variable";
+  }
+
+  .font-outfit {
+    font-family: "Outfit Variable";
+  }
+
+  .font-momo-trust-display {
+    font-family: "Momo Trust Display";
+  }
+
+  .font-stack-sans-notch {
+    font-family: "Stack Sans Notch Variable";
+  }
+
+  .font-averia-libre {
+    font-family: "Averia Libre";
+  }
+
+  .font-indie-flower {
+    font-family: "Indie Flower";
+  }
+
+  .font-special-elite {
+    font-family: "Special Elite";
+  }
+
+  .font-zen-maru-gothic {
+    font-family: "Zen Maru Gothic";
+  }
+
+  .font-red-hat-display {
+    font-family: "Red Hat Display Variable";
+  }
+
+  .font-bangers {
+    font-family: "Bangers";
+  }
+
+  .font-figtree {
+    font-family: "Figtree Variable";
+  }
+</style>

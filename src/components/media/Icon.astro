@@ -7,7 +7,7 @@ interface Props extends HTMLAttributes<"svg"> {
   /** Imported SVG. Omit to render nothing. */
   src?: SvgComponent;
   /** Icon size. */
-  variant?: "small" | "medium" | "large" | "full-width";
+  variant?: "small" | "medium" | "large" | "xlarge" | "full-width";
 }
 
 const {
@@ -39,9 +39,8 @@ if (import.meta.env.DEV && render && !Svg) {
       --_size: 1.5em;
       flex: none;
       display: block;
-      width: var(--_size);
-      height: auto;
-      aspect-ratio: 1 / 1;
+      width: auto;
+      height: var(--_size);
       max-width: 100%;
 
       &.small {
@@ -49,12 +48,16 @@ if (import.meta.env.DEV && render && !Svg) {
       }
 
       &.large {
-        --_size: 2em;
+        --_size: 4em;
+      }
+
+      &.xlarge {
+        --_size: 6em;
       }
 
       &.full-width {
         width: 100%;
-        aspect-ratio: unset;
+        height: auto;
       }
     }
   }

@@ -1081,3 +1081,35 @@
   inset: 0% 0% auto;
   overflow: hidden;
 }
+
+.border-box {
+  box-sizing: border-box;
+}
+
+.border-1 {
+  border-width: .125em;
+  border-style: solid;
+}
+
+.border-2 {
+  border-width: .25em;
+  border-style: solid;
+} 
+
+.border-3 {
+  border-width: .375em;
+  border-style: solid;
+}
+
+.border-4 {
+  border-width: .5em;
+  border-style: solid;
+}   
+
+.border-black {
+  border-color: var(--color-black);
+}
+
+.border-white {
+  border-color: var(--color-white);
+}
