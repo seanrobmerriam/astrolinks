@@ -1,11 +1,33 @@
 {
-  "version": 1,
+  "version": 2,
   "skills": {
-    "thesvg": {
-      "source": "glincker/thesvg",
+    "tailwindcss": {
+      "source": "hairyf/skills",
+      "commit": "ffa1f904012f48f5bdf34ebb692daa09c778d47f",
       "sourceType": "github",
-      "skillPath": "skills/thesvg/SKILL.md",
-      "computedHash": "267d9a43d21a6ed6ef95a167c500d330913f198656f6c3a0ee676e84e59336b9"
+      "skillPath": "skills/tailwindcss/SKILL.md",
+      "computedHash": "a7ad5b9be2a266f7f7c972bdc1d167c82088b1e11b64127ebe3037f0597d25c3"
+    },
+    "tailwindcss-accessibility": {
+      "source": "JosiahSiegel/claude-plugin-marketplace",
+      "commit": "5a1b1123b9e50aa9a66a61005ca6fe012cc7442d",
+      "sourceType": "github",
+      "skillPath": "plugins/tailwindcss-master/skills/tailwindcss-accessibility/SKILL.md",
+      "computedHash": "3250555124e057a224fcbe5e7aab56b80391eca5af028fe5be37c97b9921442c"
+    },
+    "tailwindcss-advanced-layouts": {
+      "source": "JosiahSiegel/claude-plugin-marketplace",
+      "commit": "5a1b1123b9e50aa9a66a61005ca6fe012cc7442d",
+      "sourceType": "github",
+      "skillPath": "plugins/tailwindcss-master/skills/tailwindcss-advanced-layouts/SKILL.md",
+      "computedHash": "6ba028067c497c60f6963d84e91613031a1d5ca2e3c935ddc00ff4d3e406dedf"
+    },
+    "tailwindcss-animations": {
+      "source": "JosiahSiegel/claude-plugin-marketplace",
+      "commit": "5a1b1123b9e50aa9a66a61005ca6fe012cc7442d",
+      "sourceType": "github",
+      "skillPath": "plugins/tailwindcss-master/skills/tailwindcss-animations/SKILL.md",
+      "computedHash": "ff901e0d415d566a21d1bea84b7725ccf4cc701e1dd054ed8ca805e583145609"
     }
   }
 }

@@ -1,45 +1,46 @@
-<p align="center">
-  <img src=".github/assets/banner.png" alt="Lumos For Astro" width="720">
-</p>
-
-<p align="center">
-  <a href="https://www.npmjs.com/package/create-lumos"><img alt="npm version" src="https://img.shields.io/npm/v/create-lumos?labelColor=1E1E1E&color=C6FB50"></a>
-  <a href="LICENSE"><img alt="license" src="https://img.shields.io/npm/l/create-lumos?labelColor=1E1E1E&color=C6FB50"></a>
-  <a href="https://github.com/lumosframework/lumos-for-astro/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/lumosframework/lumos-for-astro/actions/workflows/ci.yml/badge.svg"></a>
-</p>
-
-A component and styling framework for building Astro sites, designed around
-efficiency, scalability and accessibility.
-
-Documentation lives at **[lumosframework.com](https://lumosframework.com)**.
-
-## Getting started
+# Astro Starter Kit: Basics
 
 ```sh
-npm create lumos@latest my-site
+bun create astro@latest -- --template basics
 ```
 
-That scaffolds a new site from this repository and installs its dependencies
-with whichever package manager you ran it with. Then:
+> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
 
-```sh
-cd my-site
-npm run dev
+## 🚀 Project Structure
+
+Inside of your Astro project, you'll see the following folders and files:
+
+```text
+/
+├── public/
+│   └── favicon.svg
+├── src
+│   ├── assets
+│   │   └── astro.svg
+│   ├── components
+│   │   └── Welcome.astro
+│   ├── layouts
+│   │   └── Layout.astro
+│   └── pages
+│       └── index.astro
+└── package.json
 ```
 
-| Script            | What it does                      |
-| ----------------- | --------------------------------- |
-| `npm run dev`     | Starts the dev server             |
-| `npm run build`   | Builds the site to `dist/`        |
-| `npm run preview` | Serves the built site             |
-| `npm run check`   | Type-checks every `.astro` file   |
-| `npm run format`  | Formats the project with Prettier |
+To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
 
-## Documentation
+## 🧞 Commands
 
-Component reference, styling guides and examples are at
-[lumosframework.com](https://lumosframework.com).
+All commands are run from the root of the project, from a terminal:
 
-## License
+| Command                   | Action                                           |
+| :------------------------ | :----------------------------------------------- |
+| `bun install`             | Installs dependencies                            |
+| `bun dev`             | Starts local dev server at `localhost:4321`      |
+| `bun build`           | Build your production site to `./dist/`          |
+| `bun preview`         | Preview your build locally, before deploying     |
+| `bun astro ...`       | Run CLI commands like `astro add`, `astro check` |
+| `bun astro -- --help` | Get help using the Astro CLI                     |
 
-[MIT](LICENSE)
+## 👀 Want to learn more?
+
+Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
