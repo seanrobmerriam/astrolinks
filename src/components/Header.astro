@@ -1,0 +1,12 @@
+---
+import Container from "./layout/Container.astro";
+import DockerStats from "./DockerStats.astro";
+import EditButton from "./EditButton.astro";
+---
+
+<header class="border-b border-border bg-surface">
+  <Container class="flex items-start gap-4 py-4 sm:gap-8">
+    <DockerStats />
+    <EditButton />
+  </Container>
+</header>

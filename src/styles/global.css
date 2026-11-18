@@ -1,1 +1,110 @@
 @import "tailwindcss";
+
+/* Keep agent skill folders out of class scanning. */
+@source not "../../.agents";
+@source not "../../.claude";
+@source not "../../.minimax";
+
+/* Class-based theming: `.dark` on <html> is the default (see Layout.astro). */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* ---------------------------------------------------------------------------
+ * 1. Primitive tokens — raw palette values. Not used directly in markup.
+ * ------------------------------------------------------------------------ */
+:root {
+  --amber-300: oklch(0.88 0.13 85);
+  --amber-400: oklch(0.83 0.16 78);
+  --amber-600: oklch(0.6 0.15 65);
+  --amber-700: oklch(0.52 0.13 62);
+  --amber-950: oklch(0.22 0.05 60);
+
+  --stone-50: oklch(0.985 0.005 85);
+  --stone-100: oklch(0.96 0.008 85);
+  --stone-200: oklch(0.91 0.01 80);
+  --stone-300: oklch(0.84 0.012 80);
+  --stone-500: oklch(0.55 0.015 75);
+  --stone-400: oklch(0.7 0.015 75);
+  --stone-700: oklch(0.32 0.012 70);
+  --stone-800: oklch(0.24 0.01 70);
+  --stone-850: oklch(0.205 0.009 70);
+  --stone-900: oklch(0.17 0.008 70);
+  --stone-950: oklch(0.14 0.006 70);
+
+  --green-500: oklch(0.72 0.15 150);
+  --green-700: oklch(0.5 0.13 150);
+  --yellow-500: oklch(0.8 0.15 95);
+  --yellow-700: oklch(0.55 0.12 85);
+  --red-500: oklch(0.68 0.18 25);
+  --red-700: oklch(0.52 0.18 25);
+}
+
+/* ---------------------------------------------------------------------------
+ * 2. Semantic tokens — light theme values.
+ * ------------------------------------------------------------------------ */
+:root {
+  --background: var(--stone-100);
+  --surface: var(--stone-50);
+  --surface-raised: var(--stone-200);
+  --foreground: var(--stone-900);
+  --muted: var(--stone-500);
+  --border: var(--stone-300);
+  --primary: var(--amber-700);
+  --primary-strong: var(--amber-600);
+  --primary-foreground: var(--stone-50);
+  --success: var(--green-700);
+  --warning: var(--yellow-700);
+  --danger: var(--red-700);
+  color-scheme: light;
+}
+
+/* Semantic tokens — dark theme values (default). */
+.dark {
+  --background: var(--stone-950);
+  --surface: var(--stone-900);
+  --surface-raised: var(--stone-850);
+  --foreground: var(--stone-100);
+  --muted: var(--stone-400);
+  --border: var(--stone-800);
+  --primary: var(--amber-400);
+  --primary-strong: var(--amber-300);
+  --primary-foreground: var(--amber-950);
+  --success: var(--green-500);
+  --warning: var(--yellow-500);
+  --danger: var(--red-500);
+  color-scheme: dark;
+}
+
+/* Expose semantic tokens as Tailwind utilities (bg-surface, text-primary, …). */
+@theme inline {
+  --color-background: var(--background);
+  --color-surface: var(--surface);
+  --color-surface-raised: var(--surface-raised);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-border: var(--border);
+  --color-primary: var(--primary);
+  --color-primary-strong: var(--primary-strong);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-success: var(--success);
+  --color-warning: var(--warning);
+  --color-danger: var(--danger);
+}
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, monospace;
+
+  --radius-sm: 0.375rem;
+  --radius-md: 0.625rem;
+  --radius-lg: 1rem;
+}
+
+@layer base {
+  body {
+    @apply bg-background font-sans text-foreground antialiased;
+  }
+
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-primary;
+  }
+}

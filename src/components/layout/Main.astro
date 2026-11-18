@@ -1,0 +1,14 @@
+---
+import type { HTMLAttributes } from "astro/types";
+import Container from "./Container.astro";
+
+type Props = HTMLAttributes<"main">;
+
+const { class: className, ...attrs } = Astro.props;
+---
+
+<main class:list={["pb-16", className]} {...attrs}>
+  <Container class="flex flex-col gap-12 sm:gap-16">
+    <slot />
+  </Container>
+</main>
