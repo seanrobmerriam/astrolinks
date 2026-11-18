@@ -1,0 +1,26 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+type Props = HTMLAttributes<"button"> & {
+  variant?: "primary" | "outline";
+};
+
+const { variant = "outline", type = "button", class: className, ...attrs } = Astro.props;
+
+const variants = {
+  primary: "bg-primary text-primary-foreground hover:bg-primary-strong",
+  outline: "border border-border bg-surface text-primary hover:border-primary hover:bg-surface-raised",
+} as const;
+---
+
+<button
+  type={type}
+  class:list={[
+    "inline-flex min-h-11 items-center gap-2 rounded-md px-4 text-sm font-medium transition-colors",
+    variants[variant],
+    className,
+  ]}
+  {...attrs}
+>
+  <slot />
+</button>

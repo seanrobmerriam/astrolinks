@@ -1,0 +1,29 @@
+---
+import { dockerStats as stats } from "../data/mock";
+import StatItem from "./ui/StatItem.astro";
+
+// Keep "↑ 340 KB/s" together so it wraps as a unit.
+const nowrap = (text: string) => text.replaceAll(" ", "\u00a0");
+const memoryPercent = Math.round((stats.memory.usedGb / stats.memory.totalGb) * 100);
+---
+
+<section aria-label="Docker host stats" class="min-w-0 flex-1">
+  <dl class="grid grid-cols-2 gap-x-6 gap-y-4 sm:grid-cols-3 lg:grid-cols-6">
+    <StatItem
+      label="Running"
+      value={`${stats.containers.running}`}
+      detail={` / ${stats.containers.total}`}
+      percent={(stats.containers.running / stats.containers.total) * 100}
+    />
+    <StatItem label="CPU" value={`${stats.cpuPercent}%`} percent={stats.cpuPercent} />
+    <StatItem
+      label="Memory"
+      value={`${stats.memory.usedGb}`}
+      detail={` / ${stats.memory.totalGb} GB`}
+      percent={memoryPercent}
+    />
+    <StatItem label="Network" value={nowrap(`↓ ${stats.network.down}`)} detail={` ${nowrap(`↑ ${stats.network.up}`)}`} />
+    <StatItem label="Images" value={`${stats.images}`} />
+    <StatItem label="Uptime" value={stats.uptime} />
+  </dl>
+</section>

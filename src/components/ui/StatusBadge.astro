@@ -1,0 +1,22 @@
+---
+import type { ServiceStatus } from "../../data/mock";
+
+interface Props {
+  status: ServiceStatus;
+}
+
+const { status } = Astro.props;
+
+const styles = {
+  online: { dot: "bg-success", text: "text-success", label: "Online" },
+  degraded: { dot: "bg-warning", text: "text-warning", label: "Degraded" },
+  offline: { dot: "bg-danger", text: "text-danger", label: "Offline" },
+} as const;
+
+const { dot, text, label } = styles[status];
+---
+
+<span class:list={["inline-flex items-center gap-1.5 font-mono text-xs", text]}>
+  <span class:list={["size-2 rounded-full", dot]} aria-hidden="true"></span>
+  {label}
+</span>

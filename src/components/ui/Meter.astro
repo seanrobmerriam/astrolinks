@@ -1,0 +1,13 @@
+---
+interface Props {
+  /** 0–100. Decorative: the numeric value must also be shown as text. */
+  percent: number;
+}
+
+const { percent } = Astro.props;
+const clamped = Math.min(100, Math.max(0, percent));
+---
+
+<span class="block h-1 w-full overflow-hidden rounded-full bg-surface-raised" aria-hidden="true">
+  <span class="block h-full rounded-full bg-primary" style={`width: ${clamped}%`}></span>
+</span>

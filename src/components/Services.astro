@@ -1,0 +1,17 @@
+---
+import { services } from "../data/mock";
+import Section from "./layout/Section.astro";
+import ServiceCard from "./ui/ServiceCard.astro";
+---
+
+<Section id="services" title="Services" meta={`${services.length} total`}>
+  <ul class="grid grid-cols-[repeat(auto-fill,minmax(min(100%,17rem),1fr))] gap-3">
+    {
+      services.map((service) => (
+        <li class="grid">
+          <ServiceCard service={service} />
+        </li>
+      ))
+    }
+  </ul>
+</Section>

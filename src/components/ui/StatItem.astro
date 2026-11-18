@@ -1,0 +1,23 @@
+---
+import Meter from "./Meter.astro";
+
+interface Props {
+  label: string;
+  value: string;
+  detail?: string;
+  percent?: number;
+}
+
+const { label, value, detail, percent } = Astro.props;
+---
+
+<div class="flex min-w-0 flex-col gap-1">
+  <dt class="text-xs tracking-wider text-muted uppercase">{label}</dt>
+  <dd class="flex flex-col gap-1.5">
+    <span class="font-mono text-sm break-words text-foreground">
+      {value}
+      {detail && <span class="text-muted">{detail}</span>}
+    </span>
+    {percent !== undefined && <Meter percent={percent} />}
+  </dd>
+</div>

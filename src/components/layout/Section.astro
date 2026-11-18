@@ -1,0 +1,23 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+type Props = HTMLAttributes<"section"> & {
+  id: string;
+  title: string;
+  /** Optional short text shown next to the heading, e.g. a count. */
+  meta?: string;
+};
+
+const { id, title, meta, class: className, ...attrs } = Astro.props;
+const headingId = `${id}-heading`;
+---
+
+<section id={id} aria-labelledby={headingId} class:list={["flex flex-col gap-4", className]} {...attrs}>
+  <header class="flex items-baseline justify-between gap-4 border-b border-border pb-2">
+    <h2 id={headingId} class="text-sm font-semibold tracking-widest text-primary uppercase">
+      {title}
+    </h2>
+    {meta && <p class="font-mono text-xs text-muted">{meta}</p>}
+  </header>
+  <slot />
+</section>
