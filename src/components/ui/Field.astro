@@ -1,0 +1,40 @@
+---
+interface Option {
+  value: string;
+  label: string;
+}
+
+interface Props {
+  id: string;
+  name: string;
+  label: string;
+  type?: "text" | "url";
+  required?: boolean;
+  placeholder?: string;
+  /** Renders a <select> with these options instead of an <input>. */
+  options?: Option[];
+}
+
+const { id, name, label, type = "text", required = false, placeholder, options } = Astro.props;
+
+const controlClass =
+  "min-h-11 w-full rounded-md border border-border bg-background px-3 text-sm text-foreground placeholder:text-muted/70";
+---
+
+<div class="flex flex-col gap-1.5">
+  <label for={id} class="text-sm font-medium text-foreground">
+    {label}
+    {!required && <span class="font-normal text-muted">{" (optional)"}</span>}
+  </label>
+  {
+    options ? (
+      <select id={id} name={name} required={required} class={controlClass}>
+        {options.map((o) => (
+          <option value={o.value}>{o.label}</option>
+        ))}
+      </select>
+    ) : (
+      <input id={id} name={name} type={type} required={required} placeholder={placeholder} autocomplete="off" class={controlClass} />
+    )
+  }
+</div>

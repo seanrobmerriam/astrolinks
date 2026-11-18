@@ -1,11 +1,17 @@
 ---
-import { bookmarkGroups } from "../data/mock";
+import { bookmarkGroups, type Bookmark, type BookmarkGroup } from "../data/mock";
 import Section from "./layout/Section.astro";
 import BookmarkGroupCard from "./ui/BookmarkGroupCard.astro";
+import BookmarkLink from "./ui/BookmarkLink.astro";
+
+const placeholderGroup: BookmarkGroup = { id: "", title: "", links: [] };
+const placeholderLink: Bookmark = { id: "", label: "", url: "http://localhost" };
 ---
 
 <Section id="bookmarks" title="Bookmarks" meta={`${bookmarkGroups.length} groups`}>
-  <div class="grid grid-cols-[repeat(auto-fit,minmax(min(100%,13rem),1fr))] gap-3">
+  <div data-bookmark-groups class="grid grid-cols-[repeat(auto-fit,minmax(min(100%,13rem),1fr))] gap-3">
     {bookmarkGroups.map((group) => <BookmarkGroupCard group={group} />)}
   </div>
+  <template data-template="bookmark-group"><BookmarkGroupCard group={placeholderGroup} /></template>
+  <template data-template="bookmark"><BookmarkLink bookmark={placeholderLink} /></template>
 </Section>

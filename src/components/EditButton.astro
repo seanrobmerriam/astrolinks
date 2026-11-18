@@ -1,20 +1,9 @@
 ---
 import Button from "./ui/Button.astro";
+import Icon from "./ui/Icon.astro";
 ---
 
-<Button variant="outline" class="shrink-0">
-  <svg
-    class="size-4"
-    viewBox="0 0 24 24"
-    fill="none"
-    stroke="currentColor"
-    stroke-width="2"
-    stroke-linecap="round"
-    stroke-linejoin="round"
-    aria-hidden="true"
-  >
-    <path d="M12 20h9"></path>
-    <path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"></path>
-  </svg>
-  Edit
+<Button variant="outline" class="shrink-0" data-action="toggle-edit">
+  <Icon name="pencil" />
+  <span data-field="edit-label">Edit</span>
 </Button>

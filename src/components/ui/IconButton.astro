@@ -1,0 +1,30 @@
+---
+import type { HTMLAttributes } from "astro/types";
+
+type Props = HTMLAttributes<"button"> & {
+  /** Accessible name; required because the button shows only an icon. */
+  label: string;
+  variant?: "default" | "danger";
+};
+
+const { label, variant = "default", type = "button", class: className, ...attrs } = Astro.props;
+
+const variants = {
+  default: "hover:border-primary hover:text-primary",
+  danger: "hover:border-danger hover:text-danger",
+} as const;
+---
+
+<button
+  type={type}
+  aria-label={label}
+  title={label}
+  class:list={[
+    "grid size-9 shrink-0 place-items-center rounded-md border border-border bg-surface text-muted transition-colors",
+    variants[variant],
+    className,
+  ]}
+  {...attrs}
+>
+  <slot />
+</button>

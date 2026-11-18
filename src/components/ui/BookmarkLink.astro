@@ -1,0 +1,33 @@
+---
+import type { Bookmark } from "../../data/mock";
+import Icon from "./Icon.astro";
+import IconButton from "./IconButton.astro";
+
+interface Props {
+  bookmark: Bookmark;
+}
+
+const { bookmark } = Astro.props;
+---
+
+<!-- Rendered by the server and cloned from a <template> by the editor script; keep the data-* hooks in sync. -->
+<li data-id={bookmark.id} class="flex items-center gap-1">
+  <a
+    data-bookmark-link
+    href={bookmark.url}
+    target="_blank"
+    rel="noopener noreferrer"
+    class="group flex min-h-10 min-w-0 flex-1 items-center gap-2 rounded-sm text-sm text-muted transition-colors hover:text-primary"
+  >
+    <span class="text-primary/60 transition-colors group-hover:text-primary" aria-hidden="true">›</span>
+    <span data-field="label" class="truncate">{bookmark.label}</span>
+  </a>
+  <div class="hidden gap-1 editing:flex">
+    <IconButton data-action="edit-bookmark" label={`Edit ${bookmark.label}`}>
+      <Icon name="pencil" />
+    </IconButton>
+    <IconButton data-action="remove-bookmark" variant="danger" label={`Remove ${bookmark.label}`}>
+      <Icon name="trash" />
+    </IconButton>
+  </div>
+</li>

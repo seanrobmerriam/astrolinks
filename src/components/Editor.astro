@@ -1,0 +1,31 @@
+---
+import { statusOptions } from "../lib/status";
+import Dialog from "./ui/Dialog.astro";
+import Field from "./ui/Field.astro";
+---
+
+<Dialog id="service-dialog" title="Add service" submitLabel="Save">
+  <input type="hidden" name="id" />
+  <Field id="service-name" name="name" label="Name" required placeholder="Jellyfin" />
+  <Field id="service-url" name="url" label="URL" type="url" required placeholder="http://jellyfin.home.lan" />
+  <Field id="service-description" name="description" label="Description" placeholder="Movies, shows and music" />
+  <Field id="service-status" name="status" label="Status" options={statusOptions} required />
+</Dialog>
+
+<Dialog id="bookmark-dialog" title="Add bookmark" submitLabel="Save">
+  <input type="hidden" name="id" />
+  <input type="hidden" name="originalGroupId" />
+  <Field id="bookmark-label" name="label" label="Label" required placeholder="GitHub" />
+  <Field id="bookmark-url" name="url" label="URL" type="url" required placeholder="https://github.com" />
+  <Field id="bookmark-group" name="groupId" label="Group" options={[]} required />
+</Dialog>
+
+<Dialog id="confirm-dialog" title="Remove item?" submitLabel="Remove" submitVariant="danger">
+  <p data-field="confirm-message" class="text-sm text-muted"></p>
+</Dialog>
+
+<p data-field="status-message" role="status" class="sr-only"></p>
+
+<script>
+  import "../scripts/editor";
+</script>
