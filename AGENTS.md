@@ -10,6 +10,7 @@
 - Extract repeated UI patterns into reusable components.
 - Keep dependencies, abstractions, and configuration minimal.
 - Use relative units (`rem`, `em`, `%`, `fr`) wherever practical.
+- Use Astro components for each section of the site; index.astro should have only <Components /> in it.
 
 ## 2. Initial Setup
 
