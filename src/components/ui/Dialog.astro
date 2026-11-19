@@ -1,0 +1,30 @@
+---
+import Button from "./Button.astro";
+
+interface Props {
+  id: string;
+  title: string;
+  submitLabel: string;
+  submitVariant?: "primary" | "danger";
+}
+
+const { id, title, submitLabel, submitVariant = "primary" } = Astro.props;
+const titleId = `${id}-title`;
+---
+
+<!-- Modal dialog: opened with showModal(); Esc, Cancel and a backdrop click close it. -->
+<dialog
+  id={id}
+  aria-labelledby={titleId}
+  closedby="any"
+  class="m-auto w-[calc(100%-2rem)] max-w-md rounded-lg border border-border bg-surface p-0 text-foreground shadow-2xl backdrop:bg-background/80 backdrop:backdrop-blur-sm"
+>
+  <form method="dialog" class="flex flex-col gap-5 p-6">
+    <h2 id={titleId} data-field="dialog-title" class="text-lg font-semibold text-primary">{title}</h2>
+    <slot />
+    <div class="flex justify-end gap-2">
+      <Button data-action="close-dialog">Cancel</Button>
+      <Button type="submit" variant={submitVariant}>{submitLabel}</Button>
+    </div>
+  </form>
+</dialog>

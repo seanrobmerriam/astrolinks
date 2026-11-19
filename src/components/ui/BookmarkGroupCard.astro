@@ -1,5 +1,7 @@
 ---
 import type { BookmarkGroup } from "../../data/mock";
+import BookmarkLink from "./BookmarkLink.astro";
+import Icon from "./Icon.astro";
 
 interface Props {
   group: BookmarkGroup;
@@ -8,25 +10,19 @@ interface Props {
 const { group } = Astro.props;
 ---
 
-<article class="flex flex-col gap-3 rounded-lg border border-border bg-surface p-4">
-  <h3 class="font-semibold text-foreground">{group.title}</h3>
-  <ul class="flex flex-col">
-    {
-      group.links.map((link) => (
-        <li>
-          <a
-            href={link.url}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="group flex min-h-10 items-center gap-2 rounded-sm text-sm text-muted transition-colors hover:text-primary"
-          >
-            <span class="text-primary/60 transition-colors group-hover:text-primary" aria-hidden="true">
-              ›
-            </span>
-            {link.label}
-          </a>
-        </li>
-      ))
-    }
+<!-- Rendered by the server and cloned from a <template> by the editor script; keep the data-* hooks in sync. -->
+<article data-group-id={group.id} class="flex flex-col gap-3 rounded-lg border border-border bg-surface p-4 editing:border-dashed">
+  <h3 data-field="title" class="font-semibold text-foreground">{group.title}</h3>
+  <ul data-bookmark-list class="flex flex-col">
+    {group.links.map((bookmark) => <BookmarkLink bookmark={bookmark} />)}
   </ul>
+  <button
+    type="button"
+    data-action="add-bookmark"
+    aria-label={`Add bookmark to ${group.title}`}
+    class="hidden min-h-10 items-center gap-2 rounded-md border border-dashed border-border px-3 text-sm text-muted transition-colors hover:border-primary hover:text-primary editing:flex"
+  >
+    <Icon name="plus" />
+    Add bookmark
+  </button>
 </article>

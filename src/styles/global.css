@@ -8,6 +8,9 @@
 /* Class-based theming: `.dark` on <html> is the default (see Layout.astro). */
 @custom-variant dark (&:where(.dark, .dark *));
 
+/* Edit mode: `data-editing` on <html> is toggled by the Edit button (scripts/editor.ts). */
+@custom-variant editing (&:where([data-editing] *));
+
 /* ---------------------------------------------------------------------------
  * 1. Primitive tokens — raw palette values. Not used directly in markup.
  * ------------------------------------------------------------------------ */
@@ -106,5 +109,10 @@
 
   :focus-visible {
     @apply outline-2 outline-offset-2 outline-primary;
+  }
+
+  /* Stop the page scrolling behind an open modal dialog. */
+  html:has(dialog:modal) {
+    overflow: hidden;
   }
 }

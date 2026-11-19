@@ -17,7 +17,7 @@ const headingId = `${id}-heading`;
     <h2 id={headingId} class="text-sm font-semibold tracking-widest text-primary uppercase">
       {title}
     </h2>
-    {meta && <p class="font-mono text-xs text-muted">{meta}</p>}
+    {meta && <p data-section-meta class="font-mono text-xs text-muted">{meta}</p>}
   </header>
   <slot />
 </section>
