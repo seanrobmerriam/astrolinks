@@ -1,0 +1,40 @@
+# Astrolinks with live Docker stats.
+#
+#   docker compose up -d
+#
+# Then open http://<server-ip>:4321
+services:
+  astrolinks:
+    build: .
+    image: astrolinks:latest
+    restart: unless-stopped
+    ports:
+      - "4321:4321"
+    environment:
+      # Read Docker stats through the proxy below, not the raw socket.
+      DOCKER_HOST: tcp://docker-proxy:2375
+    volumes:
+      # Holds astrolinks.yaml (your services and bookmarks).
+      - astrolinks-data:/data
+    depends_on:
+      - docker-proxy
+
+  # Gives Astrolinks read-only access to the Docker API. Mounting the Docker
+  # socket directly would let the app (and anyone who could compromise it)
+  # control every container on the host; this proxy only allows GET requests
+  # to the endpoints enabled below and refuses everything else.
+  docker-proxy:
+    image: tecnativa/docker-socket-proxy:3.4
+    restart: unless-stopped
+    environment:
+      CONTAINERS: 1   # container list and per-container stats
+      INFO: 1         # container and image counts, total memory
+      EVENTS: 0       # not needed (on by default in this image)
+      POST: 0         # read-only: no starting, stopping or deleting
+      DISABLE_IPV6: 1 # listen on IPv4 only; compose networks are IPv4 unless you enable IPv6
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    # No "ports:": the proxy is reachable only by Astrolinks on this network.
+
+volumes:
+  astrolinks-data:
