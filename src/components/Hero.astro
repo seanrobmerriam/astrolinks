@@ -1,5 +1,5 @@
 ---
-import { services } from "../data/mock";
+const { services } = Astro.locals.dashboard;
 
 const online = services.filter((s) => s.status === "online").length;
 ---

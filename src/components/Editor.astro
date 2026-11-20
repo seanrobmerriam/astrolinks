@@ -2,7 +2,13 @@
 import { statusOptions } from "../lib/status";
 import Dialog from "./ui/Dialog.astro";
 import Field from "./ui/Field.astro";
+import Icon from "./ui/Icon.astro";
+
+// Initial data for the editor script. "<" is escaped so a value can't close the <script>.
+const initialData = JSON.stringify(Astro.locals.dashboard).replace(/</g, "\\u003c");
 ---
+
+<script type="application/json" id="dashboard-data" set:html={initialData} />
 
 <Dialog id="service-dialog" title="Add service" submitLabel="Save">
   <input type="hidden" name="id" />
@@ -25,6 +31,24 @@ import Field from "./ui/Field.astro";
 </Dialog>
 
 <p data-field="status-message" role="status" class="sr-only"></p>
+
+<!-- Shown when a save fails; role="alert" announces the message. -->
+<div
+  data-save-error
+  role="alert"
+  hidden
+  class="fixed inset-x-4 bottom-4 z-10 mx-auto flex max-w-md items-start gap-3 rounded-lg border border-danger bg-surface p-4 text-sm text-foreground shadow-2xl"
+>
+  <p data-field="save-error" class="min-w-0 flex-1 whitespace-pre-line"></p>
+  <button
+    type="button"
+    data-action="dismiss-error"
+    aria-label="Dismiss"
+    class="grid size-8 shrink-0 place-items-center rounded-md text-muted hover:text-foreground"
+  >
+    <Icon name="plus" class="size-4 rotate-45" />
+  </button>
+</div>
 
 <script>
   import "../scripts/editor";

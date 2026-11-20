@@ -1,9 +1,10 @@
 ---
-import { services, type Service } from "../data/mock";
+import type { Service } from "../lib/schema";
 import Section from "./layout/Section.astro";
 import Icon from "./ui/Icon.astro";
 import ServiceCard from "./ui/ServiceCard.astro";
 
+const { services } = Astro.locals.dashboard;
 const placeholder: Service = { id: "", name: "", url: "http://localhost", description: "", status: "online" };
 ---
 

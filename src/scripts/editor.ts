@@ -1,14 +1,16 @@
 // Dashboard edit mode: add, edit and remove services and bookmarks.
-// Data lives in localStorage (see lib/store.ts); markup comes from the
-// <template> elements that Services.astro and Bookmarks.astro render, so the
+// The server renders the page from config/astrolinks.yaml and embeds the same
+// data as JSON; every change is saved with PUT /api/config. Markup comes from
+// the <template> elements that Services.astro and Bookmarks.astro render, so the
 // client never duplicates the components' class lists.
-import type { Bookmark, BookmarkGroup, Service, ServiceStatus } from "../data/mock";
+import { createId } from "../lib/id";
+import type { Bookmark, BookmarkGroup, DashboardData, Service, ServiceStatus } from "../lib/schema";
 import { statusBadgeBase, statusDotBase, statusStyles } from "../lib/status";
-import { createId, defaultData, loadData, saveData, type DashboardData } from "../lib/store";
 
 const root = document.documentElement;
-const stored = loadData();
-let data: DashboardData = stored ?? defaultData();
+let data: DashboardData = JSON.parse(document.getElementById("dashboard-data")!.textContent!);
+/** Last state the server confirmed; restored when a save fails. */
+let confirmed: DashboardData = structuredClone(data);
 
 // ---------------------------------------------------------------- helpers
 
@@ -100,12 +102,56 @@ function render() {
   query("#bookmarks [data-section-meta]").textContent = `${data.bookmarkGroups.length} groups`;
 }
 
-function commit(message: string, focusSelector?: string) {
-  const saved = saveData(data);
-  render();
-  announce(saved ? message : `${message}. This browser blocked saving, so the change will be lost on reload.`);
-  const target = (focusSelector && document.querySelector<HTMLElement>(focusSelector)) || query("[data-action='toggle-edit']");
+function focusAfterRender(selector?: string) {
+  const target = (selector && document.querySelector<HTMLElement>(selector)) || query("[data-action='toggle-edit']");
   target.focus();
+}
+
+function showSaveError(message: string) {
+  setText(document, "save-error", message);
+  query("[data-save-error]").hidden = false;
+}
+
+function hideSaveError() {
+  query("[data-save-error]").hidden = true;
+}
+
+async function save(snapshot: DashboardData): Promise<DashboardData> {
+  let response: Response;
+  try {
+    response = await fetch("/api/config", {
+      method: "PUT",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify(snapshot),
+    });
+  } catch {
+    throw new Error("The server could not be reached.");
+  }
+  const body = await response.json().catch(() => null);
+  if (!response.ok) throw new Error(body?.error ?? `The server answered ${response.status}.`);
+  return body as DashboardData;
+}
+
+// Saves run one at a time, in order, so an older save can't land after a newer one.
+let saving: Promise<void> = Promise.resolve();
+
+/** Shows the change right away, then saves it; on failure the last saved state comes back. */
+function commit(message: string, focusSelector?: string) {
+  render();
+  focusAfterRender(focusSelector);
+  const snapshot = structuredClone(data);
+  saving = saving.then(async () => {
+    try {
+      confirmed = await save(snapshot);
+      hideSaveError();
+      announce(message);
+    } catch (error) {
+      data = structuredClone(confirmed);
+      render();
+      focusAfterRender();
+      showSaveError(`Couldn't save, so the change was undone.\n${(error as Error).message}`);
+    }
+  });
 }
 
 // ---------------------------------------------------------------- edit mode
@@ -266,6 +312,9 @@ document.addEventListener("click", (event) => {
     case "toggle-edit":
       setEditing(!editing);
       break;
+    case "dismiss-error":
+      hideSaveError();
+      break;
     case "close-dialog":
       target.closest("dialog")?.close();
       break;
@@ -312,6 +361,3 @@ document.addEventListener("keydown", (event) => {
     setEditing(false);
   }
 });
-
-// Saved data replaces the server-rendered defaults.
-if (stored) render();

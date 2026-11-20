@@ -1,9 +1,10 @@
 ---
-import { bookmarkGroups, type Bookmark, type BookmarkGroup } from "../data/mock";
+import type { Bookmark, BookmarkGroup } from "../lib/schema";
 import Section from "./layout/Section.astro";
 import BookmarkGroupCard from "./ui/BookmarkGroupCard.astro";
 import BookmarkLink from "./ui/BookmarkLink.astro";
 
+const { bookmarkGroups } = Astro.locals.dashboard;
 const placeholderGroup: BookmarkGroup = { id: "", title: "", links: [] };
 const placeholderLink: Bookmark = { id: "", label: "", url: "http://localhost" };
 ---
