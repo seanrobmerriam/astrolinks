@@ -1,4 +1,4 @@
-import type { ServiceStatus } from "../data/mock";
+import type { ServiceStatus } from "./schema";
 
 // Complete class strings so Tailwind can detect them. Shared by the
 // StatusBadge component (server render) and the editor script (client render).

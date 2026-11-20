@@ -34,7 +34,18 @@ const controlClass =
         ))}
       </select>
     ) : (
-      <input id={id} name={name} type={type} required={required} placeholder={placeholder} autocomplete="off" class={controlClass} />
+      <input
+        id={id}
+        name={name}
+        type={type}
+        required={required}
+        placeholder={placeholder}
+        maxlength={type === "url" ? 2048 : 200}
+        pattern={type === "url" ? "https?://.+" : undefined}
+        title={type === "url" ? "A full URL starting with http:// or https://" : undefined}
+        autocomplete="off"
+        class={controlClass}
+      />
     )
   }
 </div>
