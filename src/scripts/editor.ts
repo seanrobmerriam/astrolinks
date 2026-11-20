@@ -134,22 +134,28 @@ async function save(snapshot: DashboardData): Promise<DashboardData> {
 
 // Saves run one at a time, in order, so an older save can't land after a newer one.
 let saving: Promise<void> = Promise.resolve();
+// Bumped when a save fails. Saves queued before the failure contain the change
+// that was just undone, so they are dropped instead of sent.
+let generation = 0;
 
 /** Shows the change right away, then saves it; on failure the last saved state comes back. */
 function commit(message: string, focusSelector?: string) {
   render();
   focusAfterRender(focusSelector);
   const snapshot = structuredClone(data);
+  const queuedIn = generation;
   saving = saving.then(async () => {
+    if (queuedIn !== generation) return;
     try {
       confirmed = await save(snapshot);
       hideSaveError();
       announce(message);
     } catch (error) {
+      generation++;
       data = structuredClone(confirmed);
       render();
       focusAfterRender();
-      showSaveError(`Couldn't save, so the change was undone.\n${(error as Error).message}`);
+      showSaveError(`Couldn't save, so your unsaved changes were undone.\n${(error as Error).message}`);
     }
   });
 }

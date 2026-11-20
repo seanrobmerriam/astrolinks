@@ -96,6 +96,34 @@ function patch(doc: Document, node: unknown, value: unknown): unknown {
   return doc.createNode(value);
 }
 
+/**
+ * Writes the ids that parseDashboard derived (for entries written without an
+ * `id`, or with a duplicate one) into the matching YAML nodes. Without this,
+ * patch() could not match those entries and would replace them, dropping
+ * their comments. Lists keep their order through parsing, so index i in the
+ * file is index i in `parsed`.
+ */
+function stampIds(doc: Document, parsed: DashboardData) {
+  const stamp = (seq: unknown, items: { id: string }[]) => {
+    if (!isSeq(seq)) return;
+    seq.items.forEach((node, i) => {
+      const id = items[i]?.id;
+      if (!isMap(node) || id === undefined || node.get("id") === id) return;
+      if (node.has("id")) node.set("id", id);
+      else node.items.unshift(doc.createPair("id", id));
+    });
+  };
+  stamp(doc.get("services", true), parsed.services);
+  const groups = doc.get("bookmarkGroups", true);
+  stamp(groups, parsed.bookmarkGroups);
+  if (isSeq(groups)) {
+    groups.items.forEach((group, i) => {
+      const links = parsed.bookmarkGroups[i]?.links;
+      if (isMap(group) && links) stamp(group.get("links", true), links);
+    });
+  }
+}
+
 /** Reads the config, creating it from the starter content on first run. */
 export async function readConfig(): Promise<DashboardData> {
   const text = await readText();
@@ -114,7 +142,14 @@ function writeQueued(data: DashboardData): Promise<DashboardData> {
     const text = await readText();
     // parseText throws on a file that was broken by hand, so a save never
     // overwrites (and loses) the user's edits; they fix the file first.
-    const doc = text === null ? newDocument(data) : parseText(text).doc;
+    let doc: Document;
+    if (text === null) {
+      doc = newDocument(data);
+    } else {
+      const current = parseText(text);
+      doc = current.doc;
+      stampIds(doc, current.data);
+    }
     if (text !== null) doc.contents = patch(doc, doc.contents, data) as Document["contents"];
     await writeAtomically(doc.toString({ lineWidth: 0 }));
     return data;
