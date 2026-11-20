@@ -1,23 +1,23 @@
 ---
+import type { StatKey, StatView } from "../../lib/stats-format";
 import Meter from "./Meter.astro";
 
 interface Props {
+  stat: StatKey;
   label: string;
-  value: string;
-  detail?: string;
-  percent?: number;
+  view: StatView;
 }
 
-const { label, value, detail, percent } = Astro.props;
+const { stat, label, view } = Astro.props;
 ---
 
-<div class="flex min-w-0 flex-col gap-1">
+<!-- data-stat hooks are updated by scripts/stats.ts -->
+<div data-stat={stat} class="flex min-w-0 flex-col gap-1">
   <dt class="text-xs tracking-wider text-muted uppercase">{label}</dt>
   <dd class="flex flex-col gap-1.5">
     <span class="font-mono text-sm break-words text-foreground">
-      {value}
-      {detail && <span class="text-muted">{detail}</span>}
+      <span data-stat-value>{view.value}</span><span data-stat-detail class="text-muted">{view.detail}</span>
     </span>
-    {percent !== undefined && <Meter percent={percent} />}
+    {view.percent !== undefined && <Meter percent={view.percent} />}
   </dd>
 </div>

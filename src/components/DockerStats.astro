@@ -1,29 +1,34 @@
 ---
-import { dockerStats as stats } from "../data/mock";
+import { peekDockerStats } from "../lib/docker";
+import { statViews, type StatKey } from "../lib/stats-format";
 import StatItem from "./ui/StatItem.astro";
 
-// Keep "↑ 340 KB/s" together so it wraps as a unit.
-const nowrap = (text: string) => text.replaceAll(" ", "\u00a0");
-const memoryPercent = Math.round((stats.memory.usedGb / stats.memory.totalGb) * 100);
+// Never wait on Docker while rendering: show the latest cached stats (or
+// placeholders) and let scripts/stats.ts fill in live values.
+const result = peekDockerStats();
+const views = statViews(result?.ok ? result.stats : null);
+const error = result && !result.ok ? result.error : "";
+
+const stats: { stat: StatKey; label: string }[] = [
+  { stat: "running", label: "Running" },
+  { stat: "cpu", label: "CPU" },
+  { stat: "memory", label: "Memory" },
+  { stat: "network", label: "Network" },
+  { stat: "images", label: "Images" },
+  { stat: "uptime", label: "Uptime" },
+];
 ---
 
-<section aria-label="Docker host stats" class="min-w-0 flex-1">
-  <dl class="grid grid-cols-2 gap-x-6 gap-y-4 sm:grid-cols-3 lg:grid-cols-6">
-    <StatItem
-      label="Running"
-      value={`${stats.containers.running}`}
-      detail={` / ${stats.containers.total}`}
-      percent={(stats.containers.running / stats.containers.total) * 100}
-    />
-    <StatItem label="CPU" value={`${stats.cpuPercent}%`} percent={stats.cpuPercent} />
-    <StatItem
-      label="Memory"
-      value={`${stats.memory.usedGb}`}
-      detail={` / ${stats.memory.totalGb} GB`}
-      percent={memoryPercent}
-    />
-    <StatItem label="Network" value={nowrap(`↓ ${stats.network.down}`)} detail={` ${nowrap(`↑ ${stats.network.up}`)}`} />
-    <StatItem label="Images" value={`${stats.images}`} />
-    <StatItem label="Uptime" value={stats.uptime} />
+<section data-docker-stats aria-label="Docker host stats" class="min-w-0 flex-1">
+  <dl data-stats-grid hidden={Boolean(error)} class="grid grid-cols-2 gap-x-6 gap-y-4 sm:grid-cols-3 lg:grid-cols-6">
+    {stats.map(({ stat, label }) => <StatItem stat={stat} label={label} view={views[stat]} />)}
   </dl>
+  <div data-stats-error hidden={!error} role="status" class="flex min-h-11 flex-col justify-center gap-0.5 text-sm">
+    <p class="font-medium text-warning">Docker stats unavailable</p>
+    <p data-field="stats-error" class="text-muted">{error}</p>
+  </div>
 </section>
+
+<script>
+  import "../scripts/stats";
+</script>
