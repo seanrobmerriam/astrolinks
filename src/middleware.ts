@@ -8,7 +8,7 @@ export const onRequest = defineMiddleware(async (context, next) => {
     context.locals.dashboard = await readConfig();
   } catch (error) {
     if (!(error instanceof ConfigError)) throw error;
-    return new Response(`Astrolinks could not load its config.\n\n${error.message}\n\nFix the file and reload this page.\n`, {
+    return new Response(`Astrolinks could not load its config.\n\n${error.message}\n\nFix the problem above and reload this page.\n`, {
       status: 500,
       headers: { "content-type": "text/plain; charset=utf-8" },
     });

@@ -1,0 +1,17 @@
+# Keep the build context small and free of local or personal files
+node_modules
+dist
+.astro
+config
+.git
+.github
+.agents
+.claude
+.minimax
+.vscode
+docs
+*.log
+.env
+.env.*
+Dockerfile
+compose.yaml

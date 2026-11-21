@@ -50,7 +50,13 @@ async function writeAtomically(contents: string) {
     await writeFile(temp, contents, "utf8");
     await rename(temp, CONFIG_PATH);
   } catch (error) {
-    await rm(temp, { force: true });
+    await rm(temp, { force: true }).catch(() => undefined);
+    if (isErrno(error, "EACCES") || isErrno(error, "EPERM") || isErrno(error, "EROFS")) {
+      throw new ConfigError(
+        `Astrolinks can't write ${CONFIG_PATH} (${(error as NodeJS.ErrnoException).code}).\n` +
+          `Make the folder writable by the user Astrolinks runs as. In Docker that is user 1000: sudo chown 1000:1000 <folder>`,
+      );
+    }
     throw error;
   }
 }
