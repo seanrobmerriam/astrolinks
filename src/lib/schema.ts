@@ -10,6 +10,9 @@ export interface Service {
   name: string;
   url: string;
   description: string;
+  /** Check the URL automatically; when false, `status` is shown as set. */
+  check: boolean;
+  /** Status set by hand, shown when `check` is false. */
   status: ServiceStatus;
 }
 
@@ -52,6 +55,7 @@ const serviceSchema = z.object({
   name: text(100),
   url: httpUrl,
   description: z.string().trim().max(200).default(""),
+  check: z.boolean().default(true),
   status: z.enum(serviceStatuses).default("online"),
 });
 

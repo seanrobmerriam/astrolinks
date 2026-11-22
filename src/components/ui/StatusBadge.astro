@@ -1,15 +1,18 @@
 ---
-import type { ServiceStatus } from "../../lib/schema";
-import { statusBadgeBase, statusDotBase, statusStyles } from "../../lib/status";
+import { statusBadgeBase, statusDotBase, statusStyles, type DisplayStatus } from "../../lib/status";
 
 interface Props {
-  status: ServiceStatus;
+  status: DisplayStatus;
+  /** Why the service has this status, e.g. "HTTP 200 in 84 ms". */
+  detail: string;
 }
 
-const { dot, text, label } = statusStyles[Astro.props.status];
+const { status, detail } = Astro.props;
+const { dot, text, label } = statusStyles[status];
 ---
 
-<span data-status class:list={[statusBadgeBase, text]}>
+<!-- Updated in the browser by scripts/health.ts; keep the data-* hooks in sync. -->
+<span data-status title={detail} class:list={[statusBadgeBase, text]}>
   <span data-status-dot class:list={[statusDotBase, dot]} aria-hidden="true"></span>
-  <span data-field="status-label">{label}</span>
+  <span data-field="status-label">{label}</span><span data-field="status-detail" class="sr-only">{`, ${detail}`}</span>
 </span>

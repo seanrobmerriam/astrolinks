@@ -5,7 +5,7 @@
 // client never duplicates the components' class lists.
 import { createId } from "../lib/id";
 import type { Bookmark, BookmarkGroup, DashboardData, Service, ServiceStatus } from "../lib/schema";
-import { statusBadgeBase, statusDotBase, statusStyles } from "../lib/status";
+import { applyHealth, refreshHealth } from "./health";
 
 const root = document.documentElement;
 let data: DashboardData = JSON.parse(document.getElementById("dashboard-data")!.textContent!);
@@ -59,10 +59,9 @@ function renderService(service: Service): HTMLElement {
   setText(item, "description", service.description);
   setText(item, "host", hostOf(service.url));
 
-  const style = statusStyles[service.status] ?? statusStyles.online;
-  query("[data-status]", item).className = `${statusBadgeBase} ${style.text}`;
-  query("[data-status-dot]", item).className = `${statusDotBase} ${style.dot}`;
-  setText(item, "status-label", style.label);
+  // The badge itself is filled in by applyHealth() once the card is in the page.
+  item.dataset.check = String(service.check);
+  item.dataset.manualStatus = service.status;
 
   setLabel(item, "edit-service", `Edit ${service.name}`);
   setLabel(item, "remove-service", `Remove ${service.name}`);
@@ -95,9 +94,7 @@ function render() {
 
   query("[data-bookmark-groups]").replaceChildren(...data.bookmarkGroups.map(renderGroup));
 
-  const online = data.services.filter((s) => s.status === "online").length;
-  setText(document, "online-count", String(online));
-  setText(document, "total-count", String(data.services.length));
+  applyHealth(); // badges and the "n of m online" count
   query("#services [data-section-meta]").textContent = `${data.services.length} total`;
   query("#bookmarks [data-section-meta]").textContent = `${data.bookmarkGroups.length} groups`;
 }
@@ -148,6 +145,8 @@ function commit(message: string, focusSelector?: string) {
     if (queuedIn !== generation) return;
     try {
       confirmed = await save(snapshot);
+      // New or changed URLs get checked right away instead of at the next poll.
+      void refreshHealth();
       hideSaveError();
       announce(message);
     } catch (error) {
@@ -199,7 +198,8 @@ function openServiceDialog(service?: Service) {
   field(form, "name").value = service?.name ?? "";
   field(form, "url").value = service?.url ?? "";
   field(form, "description").value = service?.description ?? "";
-  field(form, "status").value = service?.status ?? "online";
+  // "auto" = check the URL; otherwise the status is set by hand.
+  field(form, "status").value = !service || service.check ? "auto" : service.status;
   openDialog(serviceDialog);
 }
 
@@ -226,12 +226,16 @@ function confirmRemoval(message: string, onConfirm: () => void) {
 formOf(serviceDialog).addEventListener("submit", (event) => {
   const form = event.currentTarget as HTMLFormElement;
   const values = Object.fromEntries(new FormData(form)) as Record<string, string>;
+  const id = values.id || createId();
+  const check = values.status === "auto";
   const service: Service = {
-    id: values.id || createId(),
+    id,
     name: values.name.trim(),
     url: values.url.trim(),
     description: values.description.trim(),
-    status: values.status as ServiceStatus,
+    check,
+    // Keep the previous hand-set status when switching to automatic checks.
+    status: check ? (data.services.find((s) => s.id === id)?.status ?? "online") : (values.status as ServiceStatus),
   };
   afterClose.set(serviceDialog, () => {
     const index = data.services.findIndex((s) => s.id === service.id);

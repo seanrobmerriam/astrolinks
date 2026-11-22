@@ -6,18 +6,18 @@ export function defaultDashboard(): DashboardData {
 }
 
 const services: Service[] = [
-  { id: "jellyfin", name: "Jellyfin", url: "http://jellyfin.home.lan", description: "Movies, shows and music", status: "online" },
-  { id: "home-assistant", name: "Home Assistant", url: "http://ha.home.lan", description: "Home automation hub", status: "online" },
-  { id: "nextcloud", name: "Nextcloud", url: "http://cloud.home.lan", description: "Files, calendar and contacts", status: "online" },
-  { id: "gitea", name: "Gitea", url: "http://git.home.lan", description: "Self-hosted Git forge", status: "online" },
-  { id: "portainer", name: "Portainer", url: "http://portainer.home.lan", description: "Container management", status: "online" },
-  { id: "pi-hole", name: "Pi-hole", url: "http://pihole.home.lan", description: "Network-wide ad blocking", status: "degraded" },
-  { id: "vaultwarden", name: "Vaultwarden", url: "http://vault.home.lan", description: "Password manager", status: "online" },
-  { id: "grafana", name: "Grafana", url: "http://grafana.home.lan", description: "Metrics and dashboards", status: "online" },
-  { id: "immich", name: "Immich", url: "http://photos.home.lan", description: "Photo and video backup", status: "offline" },
-  { id: "uptime-kuma", name: "Uptime Kuma", url: "http://status.home.lan", description: "Uptime monitoring", status: "online" },
-  { id: "paperless-ngx", name: "Paperless-ngx", url: "http://docs.home.lan", description: "Document archive", status: "online" },
-  { id: "sonarr", name: "Sonarr", url: "http://sonarr.home.lan", description: "TV series management", status: "online" },
+  { id: "jellyfin", name: "Jellyfin", url: "http://jellyfin.home.lan", description: "Movies, shows and music", check: true, status: "online" },
+  { id: "home-assistant", name: "Home Assistant", url: "http://ha.home.lan", description: "Home automation hub", check: true, status: "online" },
+  { id: "nextcloud", name: "Nextcloud", url: "http://cloud.home.lan", description: "Files, calendar and contacts", check: true, status: "online" },
+  { id: "gitea", name: "Gitea", url: "http://git.home.lan", description: "Self-hosted Git forge", check: true, status: "online" },
+  { id: "portainer", name: "Portainer", url: "http://portainer.home.lan", description: "Container management", check: true, status: "online" },
+  { id: "pi-hole", name: "Pi-hole", url: "http://pihole.home.lan", description: "Network-wide ad blocking", check: true, status: "online" },
+  { id: "vaultwarden", name: "Vaultwarden", url: "http://vault.home.lan", description: "Password manager", check: true, status: "online" },
+  { id: "grafana", name: "Grafana", url: "http://grafana.home.lan", description: "Metrics and dashboards", check: true, status: "online" },
+  { id: "immich", name: "Immich", url: "http://photos.home.lan", description: "Photo and video backup", check: true, status: "online" },
+  { id: "uptime-kuma", name: "Uptime Kuma", url: "http://status.home.lan", description: "Uptime monitoring", check: true, status: "online" },
+  { id: "paperless-ngx", name: "Paperless-ngx", url: "http://docs.home.lan", description: "Document archive", check: true, status: "online" },
+  { id: "sonarr", name: "Sonarr", url: "http://sonarr.home.lan", description: "TV series management", check: true, status: "online" },
 ];
 
 const bookmarkGroups: BookmarkGroup[] = [
