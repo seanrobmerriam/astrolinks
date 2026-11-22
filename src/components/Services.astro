@@ -5,12 +5,13 @@ import Icon from "./ui/Icon.astro";
 import ServiceCard from "./ui/ServiceCard.astro";
 
 const { services } = Astro.locals.dashboard;
-const placeholder: Service = { id: "", name: "", url: "http://localhost", description: "", status: "online" };
+const health = Astro.locals.health;
+const placeholder: Service = { id: "", name: "", url: "http://localhost", description: "", check: true, status: "online" };
 ---
 
 <Section id="services" title="Services" meta={`${services.length} total`}>
   <ul data-service-list class="grid grid-cols-[repeat(auto-fill,minmax(min(100%,17rem),1fr))] gap-3">
-    {services.map((service) => <ServiceCard service={service} />)}
+    {services.map((service) => <ServiceCard service={service} result={health[service.id]} />)}
     <li data-add-tile class="hidden editing:grid">
       <button
         type="button"
@@ -23,4 +24,9 @@ const placeholder: Service = { id: "", name: "", url: "http://localhost", descri
     </li>
   </ul>
   <template data-template="service"><ServiceCard service={placeholder} /></template>
+  <script type="application/json" id="service-health" set:html={JSON.stringify(health).replace(/</g, "\\u003c")} />
 </Section>
+
+<script>
+  import "../scripts/health";
+</script>

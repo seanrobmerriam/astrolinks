@@ -1,7 +1,11 @@
 ---
-const { services } = Astro.locals.dashboard;
+import { displayStatus } from "../lib/status";
 
-const online = services.filter((s) => s.status === "online").length;
+const { services } = Astro.locals.dashboard;
+const { health } = Astro.locals;
+
+// scripts/health.ts keeps this count current in the browser.
+const online = services.filter((s) => displayStatus(s, health[s.id]).status === "online").length;
 ---
 
 <section aria-labelledby="hero-heading" class="flex flex-col items-center gap-3 pt-16 text-center sm:pt-24">

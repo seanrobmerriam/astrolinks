@@ -18,7 +18,8 @@ const HEADER = ` Astrolinks dashboard config.
  comments and ordering are kept when the dashboard saves.
  - URLs must start with http:// or https://
  - id is optional; when left out it is derived from the name, label or title
- - status is one of: online, degraded, offline`;
+ - check: true (default) checks each service's URL automatically; with
+   check: false, status is shown instead: online, degraded or offline`;
 
 export class ConfigError extends Error {}
 

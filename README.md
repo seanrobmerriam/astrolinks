@@ -6,14 +6,12 @@ A self-hosted start page for your homelab: your services, your bookmarks and you
 
 ## Features
 
-- **Services:** a card per app with its address, a short description and a status badge (online, degraded or offline).
+- **Services:** a card per app with its address, a short description and a live status badge (online, degraded or offline). Astrolinks checks each service's address every 30 seconds.
 - **Bookmarks:** links sorted into groups.
 - **Edit in the browser:** click **Edit** to add, change or remove services and bookmarks, or to move a bookmark to another group. Changes are saved on the server, so every device sees the same dashboard.
 - **Plain YAML config:** everything lives in one readable file that you can also edit by hand. Comments and ordering survive saves from the dashboard.
 - **Live Docker stats:** running containers, CPU, memory, network traffic, images and host uptime along the top, refreshed every few seconds.
 - **Works on any screen:** responsive from phones to desktops, usable with the keyboard alone, and it respects reduced-motion settings.
-
-> **Early days:** service status is set by hand in the editor for now, rather than checked automatically.
 
 ## Quick start with Docker Compose
 
@@ -88,7 +86,8 @@ services:
     name: Jellyfin
     url: http://jellyfin.home.lan
     description: Movies, shows and music  # optional
-    status: online                        # online, degraded or offline (default: online)
+    check: true                           # check the URL automatically (default: true)
+    status: online                        # shown when check is false: online, degraded or offline
 
 bookmarkGroups:
   - id: development                       # optional
@@ -103,6 +102,22 @@ bookmarkGroups:
 - After editing the file by hand, reload the page to see your changes.
 - If the file has a mistake, the dashboard shows exactly what's wrong (for example `services[0].url: must be a full URL starting with http:// or https://`) instead of loading. It also refuses to save until the file is fixed, so your hand edits are never overwritten.
 - `config/` is git-ignored because it holds your own data.
+
+## Service status
+
+Every 30 seconds, while someone has the dashboard open, Astrolinks sends a request to each service's URL and shows the result:
+
+| Badge    | When                                                                                     |
+| :------- | :--------------------------------------------------------------------------------------- |
+| Online   | The service answered within 2 seconds. Any answer counts, including a login page (401/403) or a redirect. |
+| Degraded | It answered, but took longer than 2 seconds or returned a server error (HTTP 500).       |
+| Offline  | No answer within 5 seconds (refused, unreachable, unknown host), or a reverse proxy reported the app behind it as down (HTTP 502, 503 or 504). |
+
+Hover over a badge to see the details, such as `HTTP 200 in 84 ms` or `no response: connection refused`.
+
+- **Self-signed certificates are fine.** Certificate errors are ignored, because this only checks whether the service answers.
+- **The check runs from the Astrolinks server, not your browser.** In Docker, `localhost` means the Astrolinks container itself. Use addresses that the container can reach, such as the host's LAN IP or a hostname.
+- **Setting a status by hand:** choose **Always online / degraded / offline** in the editor (or set `check: false` in the config) for services that can't be checked from the server, or that you'd rather label yourself.
 
 ## Docker stats
 
@@ -120,6 +135,8 @@ The server checks Docker at most once every few seconds, however many people hav
 ## Security
 
 Astrolinks has no login: **anyone who can reach it can edit it.** Keep it on your home network, or put it behind a reverse proxy that requires authentication, such as Authelia, Authentik or your proxy's basic auth.
+
+Status checks send requests from the Astrolinks server to the URLs in your config. Anyone who can edit the dashboard can therefore find out which addresses that server can reach. This is one more reason to keep the dashboard private.
 
 Avoid mounting the Docker socket straight into the Astrolinks container. Full socket access can control every container on the host, which effectively means root. Use the read-only proxy from `compose.yaml` instead.
 
@@ -148,10 +165,10 @@ src/
 ├── components/     Page sections (Header, Hero, Services, Bookmarks, Editor) and ui/ building blocks
 ├── data/           Starter content for new config files
 ├── layouts/        The HTML page shell
-├── lib/            Config schema and YAML file handling, the Docker stats client, shared helpers
+├── lib/            Config schema and YAML file handling, service status checks, the Docker stats client, shared helpers
 ├── middleware.ts   Loads the config for each page request
 ├── pages/          index.astro, and api/config.ts for saving changes
-├── scripts/        Browser code for edit mode and the live stats bar
+├── scripts/        Browser code for edit mode, live service status and the stats bar
 └── styles/         Design tokens (colors, fonts, radii) and global styles
 ```
 
